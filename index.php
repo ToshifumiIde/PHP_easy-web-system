@@ -34,10 +34,19 @@ try{
   echo "DB接続エラー" . $e->getMessage();
 }
 //dbにデータを格納していく。->exec()メソッドを使うと()内のsqlを発行できる。
-//戻り値は実際にdbのtableに影響を与えた行の数が帰ってくるため、$countで受け取る。
-$count = $db->exec('INSERT INTO my_items SET maker_id=1, item_name="もも", price=210, keyword="缶詰,ピンク,甘い"');
-//echoで実行結果の
-echo $count . "件のデータを挿入しました";
+//exec()メソッドの戻り値は「実際にdbのtableに影響を与えた行の数」が帰ってくるため、$countで受け取る。
+// $count = $db->exec('INSERT INTO my_items SET maker_id=1, item_name="もも", price=210, keyword="缶詰,ピンク,甘い"');
+//echoで実行結果の件数を取得
+// echo $count . "件のデータを挿入しました";
+
+//dbのquery()メソッドを使用。query()メソッドもパラメータにsqlを取るがquery()メソッドは戻り値にquery()メソッド内で実行したsql文で「得られた値」を返す。
+$records = $db->query("SELECT * FROM my_items");
+//$recordsには「得られた値が格納される」
+//$records->fetch()のfetch()（割り当てる）メソッドは、dbから受け取ったレコードの行の集まりのうち、1行を取り出すメソッド。得られた値にfetch()メソッドを用いることで、Arrayが返却される。$recordに格納された値は連想配列となっており、["item_name"]などでdbのカラム名から取り出しが可能。
+while($record = $records->fetch()){
+  print($record["item_name"]) . "\n";
+}
+
 
 ?>
 </pre>
