@@ -33,6 +33,12 @@ try{
 }catch(PDOexception $e){
   echo "DB接続エラー" . $e->getMessage();
 }
+//dbにデータを格納していく。->exec()メソッドを使うと()内のsqlを発行できる。
+//戻り値は実際にdbのtableに影響を与えた行の数が帰ってくるため、$countで受け取る。
+$count = $db->exec('INSERT INTO my_items SET maker_id=1, item_name="もも", price=210, keyword="缶詰,ピンク,甘い"');
+//echoで実行結果の
+echo $count . "件のデータを挿入しました";
+
 ?>
 </pre>
 </main>
