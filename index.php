@@ -30,7 +30,7 @@ try{
     //pass
     "root"
   );
-}catch(PDOexception $e){
+}catch(PDOException $e){
   echo "DB接続エラー" . $e->getMessage();
 }
 //dbにデータを格納していく。->exec()メソッドを使うと()内のsqlを発行できる。
