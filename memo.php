@@ -18,21 +18,9 @@
 <main>
 <h2>Practice</h2>
 <?php
-//例外処理。エラーが発生した際に、そのまま処理を終了させるのではなく、例外を発生させてその処理を安全に終了させる。接続がうまくいかなかった場合、例外という処理を発生させるのがtry{}catch(){}の例外処理。
-try{
-  //PDO(PHP Data Objectの略)のオブジェクトのインスタンスを生成
-  $db = new PDO(
-    //接続文字列
-    "mysql:dbname=mydb;host=localhost;charset=utf8;",
-    //host=localhostに修正
-    //ユーザー名
-    "root",
-    //pass
-    "root"
-  );
-}catch(PDOException $e){
-  echo "DB接続エラー" . $e->getMessage();
-}
+
+require("dbconnect.php");//dbconnect.phpの読み込み
+
 //dbにデータを格納していく。->exec()メソッドを使うと()内のsqlを発行できる。
 //exec()メソッドの戻り値は「実際にdbのtableに影響を与えた行の数」が帰ってくるため、$countで受け取る。
 // $count = $db->exec('INSERT INTO my_items SET maker_id=1, item_name="もも", price=210, keyword="缶詰,ピンク,甘い"');
