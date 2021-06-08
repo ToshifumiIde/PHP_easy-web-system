@@ -23,7 +23,8 @@ try{
   //PDO(PHP Data Objectの略)のオブジェクトのインスタンスを生成
   $db = new PDO(
     //接続文字列
-    "mysql:dbname=mydb;host=localhost;charset=utf8;",//host=localhostに修正
+    "mysql:dbname=mydb;host=localhost;charset=utf8;",
+    //host=localhostに修正
     //ユーザー名
     "root",
     //pass
@@ -46,20 +47,29 @@ try{
 //   print($record["item_name"]) . "\n";
 // }
 
-$memos = $db->query("SELECT * FROM memos ORDER BY id DESC");
+
+//idをユーザーの指定するidとするためprepare()メソッドを使用する。
+//id=?とし、execute(array())メソッドで格納してく。
+
+$id = $_REQUEST["id"];
+
+if(!is_numeric($id) || $id<= 0){
+  print("1以上の数字を入力してください");
+  exit();
+}
+
+$memos = $db->prepare("SELECT * FROM memos WHERE id=?");
+$memos->execute(array(
+  $id,
+));
+$memo = $memos->fetch();
 ?>
+
 <article>
-  <?php while($memo = $memos->fetch()):?>
-    <p>
-      <a href="memo.php?id=<?php print($memo["id"]);?>">
-        <?php print(mb_substr(htmlspecialchars($memo["memo"] , ENT_QUOTES),0,50));?>
-      </a>
-    </p>
-    <time>
-      <?php print($memo["created_at"]);?>
-    </time>
-    <hr>
-  <?php endwhile;?>
+  <pre>
+    <?php print(htmlspecialchars($memo["memo"] , ENT_QUOTES)) ;?>
+  </pre>
+  <a href="index.php">戻る</a>
 </article>
 
 </main>
