@@ -57,6 +57,8 @@ $memo = $memos->fetch();
   <pre>
     <?php print(htmlspecialchars($memo["memo"] , ENT_QUOTES)) ;?>
   </pre>
+  <a href="update.php?id=<?php print($memo["id"]) ;?>">中身を編集する</a>
+  |
   <a href="index.php">戻る</a>
 </article>
 
