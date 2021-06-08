@@ -20,6 +20,26 @@
 <?php
 require("dbconnect.php");//dbconnect.phpの取り込み
 
+//page数の制御。$_REQUEST["page"]が存在し、かつ数字だった場合
+//$pageに$_REQUEST["page"]を格納。違う場合、1を格納
+if(isset($_REQUEST["page"]) && is_numeric($_REQUEST["page"])){
+  $page = $_REQUEST["page"];
+} else {
+  $page = 1;
+}
+
+$rows = 3;
+
+$start = $rows * ($page - 1);
+
+//paginationの設定を行うため、LIMIT ?,5とし、?番目から5つデータを取得する形式に変更している。
+$memos = $db->prepare("SELECT * FROM memos ORDER BY id DESC LIMIT ?, ?");
+//?に入力する値は数字指定のため、executeに入力するのは得策ではない。
+//今回は、bindParam()メソッドを使う。
+$memos->bindParam(1, $start ,PDO::PARAM_INT);
+$memos->bindParam(2, $rows ,PDO::PARAM_INT);
+$memos->execute();
+
 //dbにデータを格納していく。->exec()メソッドを使うと()内のsqlを発行できる。
 //exec()メソッドの戻り値は「実際にdbのtableに影響を与えた行の数」が帰ってくるため、$countで受け取る。
 // $count = $db->exec('INSERT INTO my_items SET maker_id=1, item_name="もも", price=210, keyword="缶詰,ピンク,甘い"');
@@ -34,8 +54,9 @@ require("dbconnect.php");//dbconnect.phpの取り込み
 //   print($record["item_name"]) . "\n";
 // }
 
-$memos = $db->query("SELECT * FROM memos ORDER BY id DESC");
+
 ?>
+
 <article>
   <?php while($memo = $memos->fetch()):?>
     <p>
@@ -48,6 +69,22 @@ $memos = $db->query("SELECT * FROM memos ORDER BY id DESC");
     </time>
     <hr>
   <?php endwhile;?>
+
+  <?php if($page >=2):?>
+  <a href="index.php?page=<?php print($page-1) ;?>">
+    <?php print($page -1);?>ページ目へ
+  </a>
+  <?php endif ;?>
+  |
+  <?php 
+    $counts = $db->query("SELECT COUNT(*) as cnt FROM memos");
+    $count = $counts->fetch();
+    $max_page = ceil($count["cnt"] / $rows);
+    if($page < $max_page):?>
+  <a href="index.php?page=<?php print($page+1) ;?>">
+    <?php print($page +1);?>ページ目へ
+  </a>
+  <?php endif ;?>
 </article>
 
 </main>
