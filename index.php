@@ -86,7 +86,11 @@ $memos->execute();
   </a>
   <?php endif ;?>
 </article>
-
+<p>
+      <a href="input.html">
+        メモを追加する
+      </a>
+</p>
 </main>
 </body>    
 </html>

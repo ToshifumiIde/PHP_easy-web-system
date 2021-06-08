@@ -59,6 +59,8 @@ $memo = $memos->fetch();
   </pre>
   <a href="update.php?id=<?php print($memo["id"]) ;?>">中身を編集する</a>
   |
+  <a href="delete.php?id=<?php print($memo["id"]) ;?>">中身を削除する</a>
+  |
   <a href="index.php">戻る</a>
 </article>
 
